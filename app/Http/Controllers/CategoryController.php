@@ -42,9 +42,61 @@ class CategoryController extends Controller
 
             return $this->sendResponse($category,'Category created successfull');
 
+        } catch (\Throwable $th) {
+            return $this->sendError('failed',$th->getMessage(),500);
+        }
+    }
+
+    public function view($slug)
+    {
+
+        try {
+
+            $category = Category::whereSlug($slug)->firstOrFail();
+            return $this->sendResponse($category,'Success');
+        } catch (\Throwable $th) {
+            return $this->sendError('failed',$th->getMessage(),500);
+        }
+    }
+
+    public function update(Request $request,$slug)
+    {
+        try {
+
+            $validateUser = Validator::make($request->all(),
+            [
+                'title' => 'required | unique:categories,slug,'.$slug,
+                'image' => 'sometimes|mimes:jpg,png,jpeg'
+            ]);
 
 
-            // $category->image =
+            $category = Category::whereSlug($slug)->firstOrFail();
+
+
+            if($validateUser->fails()){
+                return $this->sendError('validation error',$validateUser->errors(),401);
+            }
+
+            $category->title = $request->title;
+            $category->slug = Str::slug($request->title);
+            if($request->image){
+                $category->image = $this->saveImage('category',$request->image);
+            }
+            $category->save();
+
+            return $this->sendResponse($category,'Category updated successfull');
+
+        } catch (\Throwable $th) {
+            return $this->sendError('failed',$th->getMessage(),500);
+        }
+    }
+
+    public function destroy($slug)
+    {
+        try {
+            $category = Category::whereSlug($slug)->firstOrFail();
+            $category->delete();
+            return $this->sendResponse(null,'category delete successfull');
         } catch (\Throwable $th) {
             return $this->sendError('failed',$th->getMessage(),500);
         }

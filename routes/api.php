@@ -23,6 +23,9 @@ Route::prefix('admin')->group(function(){
     Route::middleware('auth:sanctum')->group(function(){
         Route::get('categories',[CategoryController::class,'index']);
         Route::post('categories/store',[CategoryController::class,'store']);
+        Route::get('categories/{slug}',[CategoryController::class,'view']);
+        Route::post('categories/update/{slug}',[CategoryController::class,'update']);
+        Route::post('categories/destroy/{slug}',[CategoryController::class,'destroy']);
     });
 
 });
