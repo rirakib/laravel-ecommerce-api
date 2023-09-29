@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\BannerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,16 @@ Route::prefix('admin')->group(function(){
         Route::get('brand/{slug}',[BrandController::class,'view']);
         Route::post('brand/update/{slug}',[BrandController::class,'update']);
         Route::post('brand/destroy/{slug}',[BrandController::class,'destroy']);
+
+        //banner
+        Route::get('banner',[BannerController::class,'index']);
+        Route::post('banner/store',[BannerController::class,'store']);
+        Route::get('banner/{id}',[BannerController::class,'view']);
+        Route::post('banner/update/{id}',[BannerController::class,'update']);
+        Route::post('banner/destroy/{id}',[BannerController::class,'destroy']);
+
+
+
 
     });
 
